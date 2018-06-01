@@ -48,7 +48,7 @@ public class TaskController {
     }
 
     @PostMapping(value = "/{taskId}")
-    public String editTask(@ModelAttribute @Valid Task task,
+    public String editTask(@Valid Task task,
                            Errors errors,
                            Model model,
                            @PathVariable("taskId") int taskId,
@@ -58,7 +58,7 @@ public class TaskController {
 
         if (errors.hasErrors()) {
             model.addAttribute("validationError");
-            return "redirect:/todoapp/tasks/{taskId}";
+            return "edit_task";
         }
 
         task = taskRepository.findTaskByTaskId(taskId);
@@ -78,7 +78,7 @@ public class TaskController {
 
     @PostMapping(value = "/new")
     public String createTask(
-            @ModelAttribute @Valid Task task,
+            @Valid Task task,
             Errors errors,
             Model model,
             @RequestParam("title") String title,
@@ -88,7 +88,7 @@ public class TaskController {
 
         if (errors.hasErrors()) {
             model.addAttribute("validationError");
-            return "redirect:/todoapp/tasks/new";
+            return "add_task";
         }
 
         User user = userRepository.findOne(userRepository.findUserIdByUsername(username));

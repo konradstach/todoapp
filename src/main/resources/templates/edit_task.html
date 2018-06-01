@@ -37,19 +37,18 @@
                 <tr class="form-group row">
                     <label>Title:</label>
                     <input type="text" maxlength="150" th:field="*{title}" class="form-control"/>
-                    <i th:errors="*{title}"></i>
+                    <i class="error" th:errors="*{title}"></i>
                 </tr>
 
                 <tr class="form-group row">
                     <label>Description(optional):</label>
                     <input type="text" maxlength="500" th:field="*{description}" class="form-control"/>
-                    <i th:errors="*{description}"></i>
                 </tr>
 
                 <tr class="form-group row">
                     <label>Date:</label>
                     <input type="date" name="date" th:field="*{date}" class="form-control input-type-date"/>
-                    <i th:errors="*{date}"></i>
+                    <i class="error" th:errors="*{date}"></i>
                 </tr>
                 <br/>
                 <tr class="text-center">

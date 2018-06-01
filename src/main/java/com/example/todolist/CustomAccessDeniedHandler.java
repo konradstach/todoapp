@@ -31,6 +31,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
                     + request.getRequestURI());
         }
 
-        response.sendRedirect("/home/accessdenied");
+        response.sendRedirect("/todoapp/accessdenied");
     }
 }

@@ -26,14 +26,14 @@ public class Task {
     private User user;
 
     @NotNull
-    @Size(min=5, max=150, message = "The category name must be 5 to 150 characters in length.")
+    @Size(min=5, max=150, message = "Title must be 5 to 150 characters in length.")
     private String title;
 
     @Size(max=500)
     private String description;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @NotNull
+    @NotNull(message = "Pick a date")
     private Date date;
 
     private boolean completed;

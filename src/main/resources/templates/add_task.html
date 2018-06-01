@@ -35,7 +35,7 @@
                 <tr class="form-group row">
                     <label>Title:</label>
                     <input type="text" maxlength="150" th:field="*{title}" class="form-control"/>
-                    <p th:errors="*{title}"></p>
+                    <p class="error" th:errors="*{title}"></p>
                 </tr>
 
                 <tr class="form-group row">
@@ -47,7 +47,7 @@
                 <tr class="form-group row">
                     <label>Date:</label>
                     <input type="date" name="date" th:field="*{date}" class="form-control input-type-date"/>
-                    <p th:errors="*{date}"></p>
+                    <p class="error" th:errors="*{date}"></p>
                 </tr>
                 <input type="hidden" id="username" name="username" th:value="${user}"/><br/>
 
