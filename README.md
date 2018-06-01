@@ -23,6 +23,6 @@ It is also defined in application.properties file in src/main/resources so it ma
 
 Additionally I have added some tasks, so that you can see how GUI shows data without adding tasks in application.
 
-Maven was used as a project managment tool.
+Maven was used as a build automation tool.
 
 I hope I cover every point to make this application working.
