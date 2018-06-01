@@ -4,6 +4,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script th:src="@{/js/bootstrap.js}"></script>
     <script th:src="@{/js/search-in-table.js}"></script>
+    <script th:src="@{/js/search-in-table-by-title.js}"></script>
+    <script th:src="@{/js/show-hide-divs.js}"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/css/custom_style.css}"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css"
@@ -12,7 +14,7 @@
           integrity="sha384-q3jl8XQu1OpdLgGFvNRnPdj5VIlCvgsDQTQB6owSOHWlAurxul7f+JpUOVdAiJ5P" crossorigin="anonymous"/>
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"/>
     <meta charset="UTF-8"/>
-    <title>Lista studentów</title>
+    <title>Lista zadań</title>
 </head>
 <body>
 <div id="container">
@@ -32,40 +34,158 @@
     <br/>
     <h3 class="text-center">Lista zadań<br/>
     </h3>
-    <div id="search">
-        <input id="myInput" class="form-control" onkeyup="searchInTable()" placeholder="&#xF002; Szukaj zadania..."/>
+
+    <div id="sort-by-date">
+        <div class="search">
+            <input id="input1" class="form-control" onkeyup="searchInTable()"
+                   placeholder="&#xF002; Szukaj zadania po tytule..."/>
+        </div>
+        <br/>
+
+        <table class="table table-hover" id="table-sorted-by-date">
+            <thead>
+            <tr>
+                <th>Lp</th>
+                <th>Tytuł</th>
+                <th>Opis</th>
+                <th>Data</th>
+                <th>Ukończono</th>
+                <th>Edytuj</th>
+                <th>Usuń</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task, iterStat : ${tasksByDate}">
+                <td th:text="${iterStat.count}">Lp</td>
+                <td th:text="${task.title}">Kontakt</td>
+                <td th:text="${task.description}">Opis</td>
+                <td th:text="${#dates.format(task.date, 'dd.MM.yyyy')}">Data</td>
+
+                <td>
+                    <form method="post" action="/todoapp/tasks/completed">
+                        <input type="hidden" id="task_id" name="taskId" th:value="${task.taskId}"/>
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                        <i th:if="${task.completed==true}">
+                            <input type="hidden" name="isCompleted" value="false"/>
+                            <button type="submit" class="action_button"><img th:src="@{/img/check.png}" width="25"
+                                                                             height="25" class="table-img-center"/>
+                            </button>
+                        </i>
+
+                        <i th:if="${task.completed==false}">
+                            <input type="hidden" name="isCompleted" value="true"/>
+                            <button type="submit" class="action_button"><img th:src="@{/img/error.png}" width="25"
+                                                                             height="25" class="table-img-center"/>
+                            </button>
+                        </i>
+                    </form>
+                </td>
+
+                <td><a th:href="@{'/todoapp/tasks/{taskId}'(taskId=${task.taskId})}">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <input type="hidden" id="taskId" name="taskId" th:value="${task.taskId}"/>
+                    <button class="action_button">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </a></td>
+
+                <td>
+                    <form method="post" th:action="@{/todoapp/tasks/{taskId}/delete(taskId=${task.taskId})}">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <input type="hidden" name="taskId" th:value="${task.taskId}"/>
+                        <button type="submit" class="action_button">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="sort-by-title" style="display: none">
+
+        <div class="search">
+            <input id="input2" class="form-control" onkeyup="searchInTableByTitle()"
+                   placeholder="&#xF002; Szukaj zadania po tytule..."/>
+        </div>
+        <br/>
+        <table class="table table-hover" id="table-sorted-by-title">
+            <thead>
+            <tr>
+                <th>Lp</th>
+                <th>Tytuł</th>
+                <th>Opis</th>
+                <th>Data</th>
+                <th>Ukończono</th>
+                <th>Edytuj</th>
+                <th>Usuń</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task, iterStat : ${tasksByTitle}">
+                <td th:text="${iterStat.count}">Lp</td>
+                <td th:text="${task.title}">Kontakt</td>
+                <td th:text="${task.description}">Opis</td>
+                <td th:text="${#dates.format(task.date, 'dd.MM.yyyy')}">Data</td>
+
+                <td>
+                    <form method="post" action="/todoapp/tasks/completed">
+                        <input type="hidden" name="taskId" th:value="${task.taskId}"/>
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                        <i th:if="${task.completed==true}">
+                            <input type="hidden" name="isCompleted" value="false"/>
+                            <button type="submit" class="action_button"><img th:src="@{/img/check.png}" width="25"
+                                                                             height="25" class="table-img-center"/>
+                            </button>
+                        </i>
+
+                        <i th:if="${task.completed==false}">
+                            <input type="hidden" name="isCompleted" value="true"/>
+                            <button type="submit" class="action_button"><img th:src="@{/img/error.png}" width="25"
+                                                                             height="25" class="table-img-center"/>
+                            </button>
+                        </i>
+                    </form>
+                </td>
+
+                <td><a th:href="@{'/todoapp/tasks/{taskId}'(taskId=${task.taskId})}">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <input type="hidden" name="taskId" th:value="${task.taskId}"/>
+                    <button class="action_button">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </a></td>
+
+                <td>
+                    <form method="post" th:action="@{/todoapp/tasks/{taskId}/delete(taskId=${task.taskId})}">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <input type="hidden" name="taskId" th:value="${task.taskId}"/>
+                        <button type="submit" class="action_button">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="button_div">
+        <a href="/todoapp/tasks/new">
+            <button>Dodaj nowe zadanie</button>
+        </a>
     </div>
     <br/>
 
-    <p>Liczba zadań <span th:text="${numberOfTasks}"></span></p>
+    <div id="sort-buttons">
+        <p>Sortuj listę:</p>
+        <button onclick="showTableSortedByDate();">Po dacie</button>
+        <button onclick="showTableSortedByTitle();">Po tytule</button>
+    </div>
 
-    <table class="table table-hover" id="myTable">
-        <thead>
-        <tr>
-            <th>Lp</th>
-            <th>Tytuł</th>
-            <th>Opis</th>
-            <th>Data</th>
-            <th>Ukończono</th>
-            <th>Edytuj</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="task, iterStat : ${tasks}">
-            <td th:text="${iterStat.count}">Lp</td>
-            <td th:text="${task.title}">Kontakt</td>
-            <td th:text="${task.description}">Opis</td>
-            <td th:text="${task.date}">Data</td>
-            <td th:text="${task.completed}">Ukończono</td>
-            <td><a th:href="@{'/todoapp/tasks/{id}'(id=${task.taskId})}">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                <button class="action_button">
-                    <i class="fas fa-edit"></i>
-                </button>
-            </a></td>
-        </tr>
-        </tbody>
-    </table>
 </div>
 </body>
 </html>

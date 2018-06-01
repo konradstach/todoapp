@@ -11,6 +11,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,14 +37,6 @@ public class MainController {
     }
 
 
-    @GetMapping(value = "/tasks")
-    public String getStudentsList(Model model, HttpServletRequest request) {
-        model.addAttribute("user", request.getRemoteUser());
-        model.addAttribute("numberOfTasks", service.getNumberOfTasks());
-        model.addAttribute("tasks", taskRepository.findTasksByUserId(userRepository.findUserIdByUsername(request.getRemoteUser())));
-        return "task_list";
-    }
-
     @GetMapping(value = "/logout")
     public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -52,4 +45,12 @@ public class MainController {
         }
         return "redirect:/todoapp/mylogin?logout";
     }
+
+    @GetMapping(value = "/accessdenied")
+    public String accessDeniedPage(HttpServletRequest request, Model model) {
+        model.addAttribute("user", request.getRemoteUser());
+        return "access_denied";
+    }
 }
+
+

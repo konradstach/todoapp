@@ -1,10 +1,10 @@
 
-function searchInTable() {
+function searchInTableByTitle() {
     // Declare variables
     var input, filter, table, tr, td, i;
-    input = document.getElementById("input1");
+    input = document.getElementById("input2");
     filter = input.value.toUpperCase();
-    table = document.getElementById("table-sorted-by-date");
+    table = document.getElementById("table-sorted-by-title");
     tr = table.getElementsByTagName("tr");
 
     // Loop through all table rows, and hide those who don't match the search query

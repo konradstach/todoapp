@@ -50,10 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         http
-                .authorizeRequests().mvcMatchers("/home/page", "/rest/**").permitAll()
+                .authorizeRequests().mvcMatchers("/rest/**").permitAll()
                 .antMatchers("/css/**", "/js/**", "/img/**", "/fonts/**").permitAll()
-                //.antMatchers("/home/mylectures").access("hasRole('ROLE_USER')")
-                //.antMatchers("/home/studentslist", "/home/addlectures", "/home/attendancelist", "/home/students/**").access("hasRole('ROLE_ADMIN')")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/todoapp/mylogin").permitAll().defaultSuccessUrl("/todoapp/tasks")
@@ -76,7 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public SessionRegistry sessionRegistry(){
+    public SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl();
     }
 }

@@ -1,8 +1,16 @@
 package com.example.todolist.model;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "task")
@@ -17,19 +25,23 @@ public class Task {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @NotNull
+    @Size(min=5, max=150, message = "The category name must be 5 to 150 characters in length.")
     private String title;
 
+    @Size(max=500)
     private String description;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private String date;
+    @NotNull
+    private Date date;
 
     private boolean completed;
 
     public Task() {
     }
 
-    public Task(User user, String title, String description, String date, boolean completed) {
+    public Task(User user, String title, String description, Date date, boolean completed) {
         this.user = user;
         this.title = title;
         this.description = description;
@@ -69,11 +81,19 @@ public class Task {
         this.description = description;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDateFromString(String date) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            this.date = formatter.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }    }
+
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -83,5 +103,24 @@ public class Task {
 
     public void setCompleted(boolean completed) {
         this.completed = completed;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return taskId == task.taskId &&
+                completed == task.completed &&
+                Objects.equals(user, task.user) &&
+                Objects.equals(title, task.title) &&
+                Objects.equals(description, task.description) &&
+                Objects.equals(date, task.date);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(taskId, user, title, description, date, completed);
     }
 }
