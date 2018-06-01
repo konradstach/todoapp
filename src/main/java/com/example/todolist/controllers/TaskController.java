@@ -57,9 +57,7 @@ public class TaskController {
                            @RequestParam("date") String date) {
 
         if (errors.hasErrors()) {
-            model.addAttribute("titleError");
-            model.addAttribute("descriptionError");
-            model.addAttribute("dateError");
+            model.addAttribute("validationError");
             return "redirect:/todoapp/tasks/{taskId}";
         }
 
@@ -89,9 +87,7 @@ public class TaskController {
             @RequestParam("username") String username) {
 
         if (errors.hasErrors()) {
-            model.addAttribute("titleError");
-            model.addAttribute("descriptionError");
-            model.addAttribute("dateError");
+            model.addAttribute("validationError");
             return "redirect:/todoapp/tasks/new";
         }
 

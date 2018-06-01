@@ -28,12 +28,6 @@ public class ToDoListApplication implements CommandLineRunner {
 	@Autowired
 	private ThymeleafProperties properties;
 
-	@Autowired
-	private TaskRepository taskRepository;
-
-	@Autowired
-	private UserRepository userRepository;
-
 	@Value("${spring.thymeleaf.templates_root:}")
 	private String templatesRoot;
 
@@ -50,10 +44,6 @@ public class ToDoListApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... strings) throws Exception {
-
-
-		User user = userRepository.findAll().get(0);
-		System.out.println(user.getUsername());
 
 	}
 
